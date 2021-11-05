@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import getters from './getters'
-//添加持久化插件，防止刷新网页后Vuex状态消失
-import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
 
@@ -21,9 +19,7 @@ const modules = modulesFiles.keys().reduce((modules, modulePath) => {
 
 const store = new Vuex.Store({
   modules,
-  getters,
-  //配置持久化插件，防止刷新网页后Vuex状态消失
-  plugins: [createPersistedState()]
+  getters
 })
 
 export default store

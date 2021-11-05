@@ -17,14 +17,12 @@ if (process.env.npm_config_preview || rawArgv.includes('--preview')) {
   const app = connect()
 
   app.use(
-    assert
     publicPath,
     serveStatic('./dist', {
       index: ['index.html', '/']
     })
   )
-  // var staticPath = path.posix.join(config.dev.publicPath, config.dev.assetsDir)
-  // app.use(staticPath, express.static('./static'))
+
   app.listen(port, function () {
     console.log(chalk.green(`> Preview at  http://localhost:${port}${publicPath}`))
     if (report) {

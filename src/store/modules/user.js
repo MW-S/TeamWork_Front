@@ -1,4 +1,4 @@
-import { login, register, logout, getInfo } from '@/api/user'
+import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
@@ -6,10 +6,7 @@ const state = {
   token: getToken(),
   name: '',
   avatar: '',
-  phone: '',
-  gender: '',
   introduction: '',
-  isAdmin: false,
   roles: []
 }
 
@@ -26,17 +23,8 @@ const mutations = {
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
   },
-  SET_PHONE: (state, phone) => {
-    state.phone = phone
-  },
-  SET_GENDER: (state, gender) => {
-    state.gender = gender
-  },
   SET_ROLES: (state, roles) => {
     state.roles = roles
-  },
-  SET_ADMIN: (state, isAdmin) => {
-    state.isAdmin = isAdmin
   }
 }
 
@@ -45,10 +33,9 @@ const actions = {
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ userName: username.trim(), password: password }).then(response => {
+      login({ username: username.trim(), password: password }).then(response => {
         const { data } = response
         commit('SET_TOKEN', data.token)
-        commit('SET_ROLES', ['admin'])
         setToken(data.token)
         resolve()
       }).catch(error => {
@@ -56,24 +43,7 @@ const actions = {
       })
     })
   },
-  // user register
-  register({ commit }, userInfo) {
-    const { name, gender, phone, password } = userInfo
-    return new Promise((resolve, reject) => {
-      register({ name: name, gender: gender, phone: phone, password: password }).then(response => {
-        const { data } = response
-        // alert('注册成功')
-        // commit('SET_ROLES', ['admin'])
-        // commit('SET_TOKEN', data.token)
-        // commit('SET_PHONE', data.phone)
-        // commit('SET_NAME', data.name)
-        // commit('SET_AVATAR', data.avatar)
-        resolve(data)
-      }).catch(error => {
-        reject(error)
-      })
-    })
-  },
+
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
@@ -131,9 +101,7 @@ const actions = {
       resolve()
     })
   },
-  setAdmin({ commit }, isAdmin) {
-    commit('SET_ADMIN', isAdmin)
-  },
+
   // dynamically modify permissions
   async changeRoles({ commit, dispatch }, role) {
     const token = role + '-token'

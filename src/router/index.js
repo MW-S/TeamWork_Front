@@ -7,7 +7,15 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 /* Router Modules */
-// import tableRouter from './modules/table'
+import chartsRouter from './modules/charts'
+import tableRouter from './modules/table'
+
+import projectRouter from './modules/project'
+import reformRouter from './modules/reform'
+import registerRouter from './modules/register'
+import taskRouter from './modules/task'
+import teamRouter from './modules/team'
+import userRouter from './modules/user'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -52,11 +60,7 @@ export const constantRoutes = [
     component: () => import('@/views/login/index'),
     hidden: true
   },
-  {
-    path: '/register',
-    component: () => import('@/views/register/index'),
-    hidden: true
-  },
+  registerRouter,
   {
     path: '/auth-redirect',
     component: () => import('@/views/login/auth-redirect'),
@@ -73,88 +77,15 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: '/createProject',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/create-project/index'),
-        name: '创建项目',
-        meta: { title: '创建项目', icon: 'team', affix: false }
-      }
-    ]
-  },
-  {
-    path: '/projectMember',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/project-member/index'),
-        name: '项目成员',
-        meta: { title: '项目成员', icon: 'team', affix: false }
-      }
-    ]
-  },
-  {
     path: '/',
     component: Layout,
-    redirect: '/project',
+    redirect: '/dashboard',
     children: [
       {
-        path: 'project',
-        component: () => import('@/views/table/project'),
-        name: '项目',
-        meta: { title: '项目', icon: 'project', affix: true }
-      }
-    ]
-  },
-  // {
-  //   path: '/project',
-  //   component: Layout,
-  //   redirect: '/project/index',
-  //   hidden: true
-  // },
-  {
-    path: '/task',
-    component: Layout,
-    redirect: '/task/task',
-    children: [
-      {
-        path: 'task',
-        component: () => import('@/views/table/task'),
-        name: '任务',
-        meta: { title: '任务', icon: 'task', affix: true }
-      }
-    ]
-  },
-  {
-    path: '/reform',
-    component: Layout,
-    redirect: '/reform/index',
-    hidden: false,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/table/reform'),
-        name: '动态',
-        meta: { title: '动态', icon: 'reform', affix: false }
-      }
-    ]
-  },
-  {
-    path: '/user',
-    component: Layout,
-    hidden: false,
-    redirect: '/user/user',
-    children: [
-      {
-        path: 'user',
-        component: () => import('@/views/table/user'),
-        name: '用户',
-        meta: { title: '用户', icon: 'person', affix: false }
+        path: 'dashboard',
+        component: () => import('@/views/dashboard/index'),
+        name: 'Dashboard',
+        meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
       }
     ]
   }
@@ -165,33 +96,131 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
+  {
+    path: '/permission',
+    component: Layout,
+    redirect: '/permission/page',
+    alwaysShow: true, // will always show the root menu
+    name: 'Permission',
+    meta: {
+      title: 'Permission',
+      icon: 'lock',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [
+      {
+        path: 'page',
+        component: () => import('@/views/permission/page'),
+        name: 'PagePermission',
+        meta: {
+          title: 'Page Permission',
+          roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path: 'directive',
+        component: () => import('@/views/permission/directive'),
+        name: 'DirectivePermission',
+        meta: {
+          title: 'Directive Permission'
+          // if do not set roles, means: this page does not require permission
+        }
+      },
+      {
+        path: 'role',
+        component: () => import('@/views/permission/role'),
+        name: 'RolePermission',
+        meta: {
+          title: 'Role Permission',
+          roles: ['admin']
+        }
+      }
+    ]
+  },
 
-  // tableRouter,
+  /** when your routing map is too long, you can split it into small modules **/
 
-  // {
-  //   path: '/error',
-  //   component: Layout,
-  //   redirect: 'noRedirect',
-  //   name: 'ErrorPages',
-  //   meta: {
-  //     title: 'Error Pages',
-  //     icon: '404'
-  //   },
-  //   children: [
-  //     {
-  //       path: '401',
-  //       component: () => import('@/views/error-page/401'),
-  //       name: 'Page401',
-  //       meta: { title: '401', noCache: true }
-  //     },
-  //     {
-  //       path: '404',
-  //       component: () => import('@/views/error-page/404'),
-  //       name: 'Page404',
-  //       meta: { title: '404', noCache: true }
-  //     }
-  //   ]
-  // },
+  projectRouter,
+  taskRouter,
+  teamRouter,
+  userRouter,
+  reformRouter,
+  chartsRouter,
+
+  tableRouter,
+
+  {
+    path: '/example',
+    component: Layout,
+    redirect: '/example/list',
+    name: 'Example',
+    meta: {
+      title: 'Example',
+      icon: 'el-icon-s-help'
+    },
+    children: [
+      {
+        path: 'create',
+        component: () => import('@/views/example/create'),
+        name: 'CreateArticle',
+        meta: { title: 'Create Article', icon: 'edit' }
+      },
+      {
+        path: 'edit/:id(\\d+)',
+        component: () => import('@/views/example/edit'),
+        name: 'EditArticle',
+        meta: { title: 'Edit Article', noCache: true, activeMenu: '/example/list' },
+        hidden: true
+      },
+      {
+        path: 'list',
+        component: () => import('@/views/example/list'),
+        name: 'ArticleList',
+        meta: { title: 'Article List', icon: 'list' }
+      }
+    ]
+  },
+
+  {
+    path: '/error',
+    component: Layout,
+    redirect: 'noRedirect',
+    name: 'ErrorPages',
+    hidden: true,
+    meta: {
+      title: 'Error Pages',
+      icon: '404'
+    },
+    children: [
+      {
+        path: '401',
+        component: () => import('@/views/error-page/401'),
+        name: 'Page401',
+        meta: { title: '401', noCache: true }
+      },
+      {
+        path: '404',
+        component: () => import('@/views/error-page/404'),
+        name: 'Page404',
+        meta: { title: '404', noCache: true }
+      }
+    ]
+  },
+
+  {
+    path: '/error-log',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'log',
+        component: () => import('@/views/error-log/index'),
+        name: 'ErrorLog',
+        meta: { title: 'Error Log', icon: 'bug' }
+      }
+    ]
+  },
+
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
