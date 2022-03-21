@@ -2,23 +2,61 @@ import request from '@/utils/request'
 
 export function login(data) {
   return request({
-    url: '/vue-element-admin/user/login',
+    url: '/auth/login',
     method: 'post',
     data
   })
 }
 
-export function getInfo(token) {
+export function getInfo() {
   return request({
-    url: '/vue-element-admin/user/info',
-    method: 'get',
-    params: { token }
+    url: '/auth/info',
+    method: 'get'
   })
 }
 
 export function logout() {
   return request({
-    url: '/vue-element-admin/user/logout',
+    url: '/auth/logout',
     method: 'post'
+  })
+}
+
+export function getList() {
+  return request({
+    url: '/user/getList',
+    method: 'get'
+  })
+}
+
+export function fetchUser(id) {
+  return request({
+    url: '/user/getById',
+    method: 'get',
+    params: { id }
+  })
+}
+
+export function updateUser(data) {
+  return request({
+    url: '/user/update',
+    method: 'post',
+    data
+  })
+}
+
+export function createUser(data) {
+  return request({
+    url: '/user/add',
+    method: 'post',
+    data
+  })
+}
+
+export function delUser(data) {
+  return request({
+    url: '/user/del',
+    method: 'post',
+    data
   })
 }

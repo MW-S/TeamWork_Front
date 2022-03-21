@@ -13,3 +13,15 @@ export function setToken(token) {
 export function removeToken() {
   return Cookies.remove(TokenKey)
 }
+
+export function getJWTToken() {
+  return Cookies.get('Authorization')
+}
+
+export function setJWTToken(token) {
+  return Cookies.set('Authorization', 'Bearer ' + token)
+}
+
+export function removeJWTToken() {
+  return Cookies.remove('Authorization')
+}

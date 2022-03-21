@@ -36,6 +36,25 @@ module.exports = {
       warnings: false,
       errors: true
     },
+    proxy: {
+      [process.env.VUE_APP_BASE_API]: {
+        target: "http://localhost:8080",    // 请求的第三方接口地址
+        ws: true,
+        changeOrigin: true,                // 请求跨域时，需配置此项
+        secure: false,      // 是否校验（或者说理会）对方https证书
+        logLevel: 'debug',  // 日志等级，默认可以不配置用于调试时打印一些代理信息
+        onProxyRes: function (proxyRes, req, res) { // 代理response事件
+          
+        },
+        onProxyReq: function (proxyReq, req, res) { // 代理requset事件
+          
+          // delete req.headers.host
+        },
+        pathRewrite: {                     // 路径重写,替换target中的请求地址
+          ["^"+process.env.VUE_APP_BASE_API]: "",
+        },
+      },
+    },
     before: require('./mock/mock-server.js')
   },
   configureWebpack: {

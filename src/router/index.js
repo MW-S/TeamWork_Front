@@ -8,13 +8,11 @@ import Layout from '@/layout'
 
 /* Router Modules */
 import chartsRouter from './modules/charts'
-import tableRouter from './modules/table'
 
 import projectRouter from './modules/project'
 import reformRouter from './modules/reform'
 import registerRouter from './modules/register'
 import taskRouter from './modules/task'
-import teamRouter from './modules/team'
 import userRouter from './modules/user'
 
 /**
@@ -142,44 +140,9 @@ export const asyncRoutes = [
 
   projectRouter,
   taskRouter,
-  teamRouter,
   userRouter,
   reformRouter,
   chartsRouter,
-
-  tableRouter,
-
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/list',
-    name: 'Example',
-    meta: {
-      title: 'Example',
-      icon: 'el-icon-s-help'
-    },
-    children: [
-      {
-        path: 'create',
-        component: () => import('@/views/example/create'),
-        name: 'CreateArticle',
-        meta: { title: 'Create Article', icon: 'edit' }
-      },
-      {
-        path: 'edit/:id(\\d+)',
-        component: () => import('@/views/example/edit'),
-        name: 'EditArticle',
-        meta: { title: 'Edit Article', noCache: true, activeMenu: '/example/list' },
-        hidden: true
-      },
-      {
-        path: 'list',
-        component: () => import('@/views/example/list'),
-        name: 'ArticleList',
-        meta: { title: 'Article List', icon: 'list' }
-      }
-    ]
-  },
 
   {
     path: '/error',
